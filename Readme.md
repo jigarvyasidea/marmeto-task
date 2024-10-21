@@ -1,56 +1,51 @@
-# Coding Assessment L-2 Code Submission Process with Boilerplate
+# Responsive Cart Page
 
-Welcome to the coding assessment l2. We are excited to see your skills in action. Please follow the instructions below to submit your solution.
+## Objective
+This project is a functional and responsive cart page built using HTML, CSS, and JavaScript. It dynamically loads cart items from a provided JSON API and provides essential cart features, including quantity updates, item removal, and price calculations. The page is designed to be responsive across mobile, tablet, and desktop devices.
 
-## Getting Started
+## Design Reference
+The design for the cart page follows a pre-defined structure and can be accessed via the [Figma link](https://www.figma.com/design/OyvjOBRzxCEtrdE2bltFu8/L%26D-Traineeship-%3C%3E-L2?node-id=0-1&node-type=canvas&t=ul0gvKb8dPNw4p82-0).
 
-1. **Clone or Download:**
-   - If using Git, clone the repository using the following command:
-     ```
-     git clone https://github.com/mmdmrishabh/Coding-assessment-l2-Boilerplate-code.git
-     ```
-   - Alternatively, download the code as a ZIP file and extract it.
+## Features
 
-2. **Navigate to Project Directory:**
+1. **Dynamic Cart Rendering:**
+   - Fetch cart data from the provided [API](https://cdn.shopify.com/s/files/1/0883/2188/4479/files/apiCartData.json?v=1728384889) using JavaScript.
+   - Dynamically render cart items, displaying product details like:
+     - Product image.
+     - Title.
+     - Price.
+     - Quantity input field.
+     - Item subtotal (calculated as price * quantity).
 
-3. **Explore the Structure:**
-Take a moment to review the project structure:
+2. **Responsive Layout:**
+   - The cart page is responsive, working seamlessly across mobile, tablet, and desktop devices.
+   - For desktop, it uses a two-column layout, with cart items on the left and cart totals on the right.
 
-        project-root/
-        |-- index.html
-        |-- style.css
-        |-- script.js
-        |-- README.md
-- `index.html`: Main HTML file for your project.
-- `style.css`: CSS file for styling.
-- `script.js`: JavaScript file for scripting logic.
-- `README.md`: Documentation for your project.
-  
-> **Important:** Avoid using additional files or a single file for your code. Feel free to organize asset files by creating a separate folder.
+3. **Cart Features:**
+   - **Update Quantity:** Users can adjust the quantity of items in their cart, with changes dynamically updating the item subtotal and overall total.
+   - **Remove Item:** Users can remove items from the cart, which updates the totals in real time.
+   - **Check Out Button:** Includes a functional checkout button (without actual payment processing).
 
-## Development and Testing
+4. **Price Calculation:**
+   - Dynamically calculate and display the subtotal for each item and the total price for the entire cart.
+   - Prices are displayed in Indian Rupees (₹) with appropriate formatting.
 
-4. **Start Working:**
-- Read all requirements that are shared with design files.
-- Open `index.html` in your browser to view the initial state of the project, And start coding.
-- Modify the `style.css` and `script.js` files to implement your solution.
-5. **Testing:**
-- Test your code to ensure it produces the expected output.
-- Ensure that the console (Developer Tools) does not display any errors.
+5. **Additional Features:**
+   - **Loading Animation:** A loading spinner is displayed while cart data is being fetched from the API.
+   - **Currency Formatting:** All prices are formatted in INR with commas for easier readability.
 
+## Bonus Features (Optional)
+1. **Local Storage Support:** Persists cart items and their quantities in the browser’s local storage so the cart remains populated after page reload.
+2. **Confirmation Modal for Item Removal:** Before removing an item, the user is prompted with a confirmation modal.
 
----
-## Updated Submission Guidelines
+## Tech Stack
 
-1. Fill out the form provided at [this link](https://forms.gle/MxuzmExHGXBh3hVk8).
-2. Provide the GitHub repository link of your project in the designated field.
-3. Share the hosted link of your project in the appropriate field.
+- **HTML:** For page structure and content.
+- **CSS:** To style the page and ensure responsiveness.
+- **JavaScript (ES6+):** To fetch data from the API, handle dynamic rendering of cart items, and manage cart functionality.
 
+## How to Run the Project Locally
 
-## Important Notes
-
-- Do not use any third-party libraries or frameworks.
-- Ensure that your project works as intended and is free from errors.
-- Make sure to include clear instructions on how to run your project (if necessary).
-
-Good luck! We look forward to reviewing your submission.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/responsive-cart-page.git
