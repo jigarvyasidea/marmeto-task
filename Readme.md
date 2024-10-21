@@ -34,9 +34,7 @@ The design for the cart page follows a pre-defined structure and can be accessed
    - **Loading Animation:** A loading spinner is displayed while cart data is being fetched from the API.
    - **Currency Formatting:** All prices are formatted in INR with commas for easier readability.
 
-## Bonus Features (Optional)
-1. **Local Storage Support:** Persists cart items and their quantities in the browser’s local storage so the cart remains populated after page reload.
-2. **Confirmation Modal for Item Removal:** Before removing an item, the user is prompted with a confirmation modal.
+
 
 ## Tech Stack
 
