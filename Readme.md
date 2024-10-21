@@ -48,4 +48,4 @@ The design for the cart page follows a pre-defined structure and can be accessed
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/responsive-cart-page.git
+   git clone https://github.com/jigarvyasidea/marmeto-task
