@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marmeto Cart</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="../assets/marmeto-logo.png" alt="Marmeto">
+            <span class="logo-text">Marmeto</span>
+        </div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+        <div class="icons">
+            <a href="#" class="search-icon">
+                <img src="../assets/SEARCH.png" alt="search icon "/>
+            </a>
+            <a href="#" class="wishlist-icon">♡</a>
+            <a href="#" class="cart-icon">🛒</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="logo-small">
+                <img src="../assets/marmeto-logo.png" alt="Marmeto">
+            </div>
+            <h1>Cart</h1>
+            <div class="breadcrumb">Home > Cart</div>
+        </div>
+
+        <div class="cart-container">
+            <div class="cart-items">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items-body"></tbody>
+                </table>
+            </div>
+            <div class="cart-totals">
+                <h2>Cart Totals</h2>
+                <div class="subtotal">
+                    <span>Subtotal</span>
+                    <span id="subtotal-amount">Rs. 0.00</span>
+                </div>
+                <div class="total">
+                    <span>Total</span>
+                    <span id="total-amount">Rs. 0.00</span>
+                </div>
+                <button id="checkout-btn">Check Out</button>
+            </div>
+        </div>
+    </main>
+
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3>Remove Item</h3>
+            <p>Are you sure you want to remove this item from your cart?</p>
+            <div class="modal-buttons">
+                <button id="confirm-remove" class="modal-btn confirm-btn">Yes, Remove</button>
+                <button id="cancel-remove" class="modal-btn cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Loader -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+
+    <footer>
+        <div class="service-icons">
+            <div class="service-item">
+                <img src="../assets/trophy1.png" alt="High Quality">
+                <h3>High Quality</h3>
+                <p>crafted from top materials</p>
+            </div>
+            <div class="service-item">
+                <img src="../assets/Group.png" alt="Warranty Protection">
+                <h3>Warranty Protection</h3>
+                <p>Over 2 years</p>
+            </div>
+            <div class="service-item">
+                <img src="../assets/shipping.png" alt="Free Shipping">
+                <h3>Free Shipping</h3>
+                <p>Order over 150 $</p>
+            </div>
+            <div class="service-item">
+                <img src="../assets/customer-support.png" alt="24 / 7 Support">
+                <h3>24 / 7 Support</h3>
+                <p>Dedicated support</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
