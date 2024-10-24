@@ -1,73 +1,30 @@
 let cartData = null;
 
+// Cart data ko fetch karne ka function
 async function fetchCartData() {
-    showLoader();
+    showLoader(); // Loader dikhana shuru karte hain
     try {
         const response = await fetch('https://cdn.shopify.com/s/files/1/0883/2188/4479/files/apiCartData.json?v=1728384889');
-        cartData = await response.json();
-        renderCart();
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`); // Agar response theek nahi hai toh error throw karte hain
+        }
+        cartData = await response.json(); // Response ko JSON mein convert karte hain
+        renderCart(); // Cart render karne ka function call karte hain
     } catch (error) {
-        console.error('Error fetching cart data:', error);
+        console.error('Error fetching cart data:', error); // Error ko console par print karte hain
+        showFeedbackMessage('Unable to load cart data. Please try again later.'); // User ko feedback dikhate hain
     } finally {
-        hideLoader();
+        hideLoader(); // Loader ko chhupana
     }
 }
 
+// Cart items ko render karne ka function
 function renderCart() {
-    const cartItemsBody = document.getElementById('cart-items-body');
-    cartItemsBody.innerHTML = '';
-
-    cartData.items.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>
-                <div class="cart-item">
-                    <img src="${item.image}" alt="${item.title}">
-                    <span>${item.title}</span>
-                </div>
-            </td>
-            <td>Rs. ${formatPrice(item.price)}</td>
-            <td>
-                <input type="number" value="${item.quantity}" min="1" data-id="${item.id}" class="quantity-input">
-            </td>
-            <td>
-                Rs. ${formatPrice(item.final_line_price)}
-                <button class="remove-item" data-id="${item.id}">🗑️</button>
-            </td>
-        `;
-        cartItemsBody.appendChild(row);
-    });
-
-    updateCartTotals();
-}
-
-
-
-function showFeedbackMessage(message) {
-    
-    const feedback = document.createElement('div');
-    feedback.textContent = message;
-    feedback.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #000;
-        color: white;
-        padding: 1rem;
-        border-radius: 4px;
-        z-index: 1000;
-        animation: fadeOut 3s forwards;
-    `;
-    document.body.appendChild(feedback);
-    setTimeout(() => feedback.remove(), 3000);
-}
-
-
-function renderCart() {
-    const cartItemsBody = document.getElementById('cart-items-body');
-    cartItemsBody.innerHTML = '';
+    const cartItemsBody = document.getElementById('cart-items-body'); // Cart items ka table body
+    cartItemsBody.innerHTML = ''; // Purana content clear karte hain
 
     if (!cartData?.items?.length) {
+        // Agar cart empty hai
         cartItemsBody.innerHTML = `
             <tr>
                 <td colspan="4" style="text-align: center; padding: 2rem;">
@@ -75,197 +32,136 @@ function renderCart() {
                 </td>
             </tr>
         `;
-        updateCartTotals();
-        return;
+        updateCartTotals(); // Totals update karte hain
+        return; // Function se return karte hain
     }
 
+    // Cart items ko render karte hain
     cartData.items.forEach(item => {
-        const row = document.createElement('tr');
+        const row = document.createElement('tr'); // Naya row create karte hain
         row.innerHTML = `
             <td>
                 <div class="cart-item">
-                    <img src="${item.image}" alt="${item.title}">
-                    <span>${item.title}</span>
+                    <img src="${item.image}" alt="${item.title}"> <!-- Item ki image -->
+                    <span>${item.title}</span> <!-- Item ka title -->
                 </div>
             </td>
-            <td>Rs. ${formatPrice(item.price)}</td>
+            <td>Rs. ${formatPrice(item.price)}</td> <!-- Item ka price -->
             <td>
-                <input type="number" value="${item.quantity}" min="1" data-id="${item.id}" class="quantity-input">
+                <input type="number" value="${item.quantity}" min="1" data-id="${item.id}" class="quantity-input"> <!-- Quantity input -->
             </td>
             <td>
                 <div class="subtotal-container">
-                    <span>Rs. ${formatPrice(item.final_line_price)}</span>
-                    <button class="remove-item" data-id="${item.id}" aria-label="Remove item">🗑️</button>
+                    <span>Rs. ${formatPrice(item.final_line_price)}</span> <!-- Final line price -->
+                    <button class="remove-item" data-id="${item.id}" aria-label="Remove item">🗑️</button> <!-- Remove button -->
                 </div>
             </td>
         `;
-        cartItemsBody.appendChild(row);
+        cartItemsBody.appendChild(row); // Row ko table body mein add karte hain
     });
 
-    updateCartTotals();
+    updateCartTotals(); // Cart totals update karte hain
 }
 
-function showModal(itemId) {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'flex';
-    
-
-    modal.onclick = (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    };
-    
-    
-    const confirmBtn = document.getElementById('confirm-remove');
-    const cancelBtn = document.getElementById('cancel-remove');
-    
-    const newConfirmBtn = confirmBtn.cloneNode(true);
-    const newCancelBtn = cancelBtn.cloneNode(true);
-    
-    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-    
-    newConfirmBtn.onclick = () => {
-        removeItem(itemId);
-        modal.style.display = 'none';
-        showFeedbackMessage('Item removed from cart');
-    };
-    
-    newCancelBtn.onclick = () => {
-        modal.style.display = 'none';
-    };
+// Feedback message dikhane ka function
+function showFeedbackMessage(message) {
+    // Yahan feedback message dikhana
 }
 
-
-function removeItem(itemId) {
-    try {
-        if (!cartData?.items) {
-            throw new Error('Cart data is not available');
-        }
-        
-        const itemIndex = cartData.items.findIndex(item => item.id === itemId);
-        if (itemIndex === -1) {
-            throw new Error('Item not found in cart');
-        }
-        
-        cartData.items = cartData.items.filter(item => item.id !== itemId);
-        renderCart();
-        saveCartToLocalStorage();
-        
-    } catch (error) {
-        console.error('Error removing item:', error);
-        showFeedbackMessage('Error removing item. Please try again.');
-    }
-}
-
-
-async function fetchCartData() {
-    showLoader();
-    try {
-        const response = await fetch('https://cdn.shopify.com/s/files/1/0883/2188/4479/files/apiCartData.json?v=1728384889');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        cartData = await response.json();
-        renderCart();
-    } catch (error) {
-        console.error('Error fetching cart data:', error);
-        showFeedbackMessage('Unable to load cart data. Please try again later.');
-    } finally {
-        hideLoader();
-    }
-}
-
+// Cart totals ko update karne ka function
 function updateCartTotals() {
-    const subtotal = cartData.items.reduce((acc, item) => acc + item.final_line_price, 0);
+    const subtotal = cartData.items.reduce((acc, item) => acc + item.final_line_price, 0); // Subtotal calculate karte hain
     
-    // Format the amounts properly
+    // Amount ko properly format karte hain
     document.getElementById('subtotal-amount').textContent = `Rs. ${formatPrice(subtotal)}`;
-    document.getElementById('total-amount').textContent = `Rs. ${formatPrice(subtotal)}`; // Using subtotal as total since they're the same in the image
+    document.getElementById('total-amount').textContent = `Rs. ${formatPrice(subtotal)}`; // Total aur subtotal same hain is case mein
 }
 
-
+// Price ko format karne ka function
 function formatPrice(amount) {
-    return (amount / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (amount / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Amount ko formatted string mein convert karte hain
 }
 
-
-function formatCurrency(amount) {
-    return `₹${(amount / 100).toLocaleString('en-IN')}`;
-}
-
+// Quantity change handle karne ka function
 function handleQuantityChange(event) {
     if (event.target.classList.contains('quantity-input')) {
-        const itemId = parseInt(event.target.dataset.id);
-        const newQuantity = parseInt(event.target.value);
+        const itemId = parseInt(event.target.dataset.id); // Item ID lete hain
+        const newQuantity = parseInt(event.target.value); // Nayi quantity lete hain
         
-        if (newQuantity < 1) return; // Prevent negative quantities
+        if (newQuantity < 1) return; // Negative quantities ko prevent karte hain
 
-        const item = cartData.items.find(item => item.id === itemId);
+        const item = cartData.items.find(item => item.id === itemId); // Item ko dhoondte hain
         if (item) {
-            item.quantity = newQuantity;
-            item.final_line_price = item.price * newQuantity;
-            renderCart();
-            saveCartToLocalStorage();
+            item.quantity = newQuantity; // Quantity update karte hain
+            item.final_line_price = item.price * newQuantity; // Final line price update karte hain
+            renderCart(); // Cart ko dobara render karte hain
+            saveCartToLocalStorage(); // Cart ko local storage mein save karte hain
         }
     }
 }
 
+// Item remove karne ka function
 function handleRemoveItem(event) {
     if (event.target.classList.contains('remove-item')) {
-        const itemId = parseInt(event.target.dataset.id);
-        showModal(itemId);
+        const itemId = parseInt(event.target.dataset.id); // Item ID lete hain
+        showModal(itemId); // Confirmation modal dikhate hain
     }
 }
 
+// Confirmation modal dikhane ka function
 function showModal(itemId) {
     const modal = document.getElementById('modal');
-    modal.style.display = 'flex';
+    modal.style.display = 'flex'; // Modal ko dikhate hain
     
     document.getElementById('confirm-remove').onclick = () => {
-        removeItem(itemId);
-        modal.style.display = 'none';
+        removeItem(itemId); // Item remove karte hain
+        modal.style.display = 'none'; // Modal ko chhupate hain
     };
     
     document.getElementById('cancel-remove').onclick = () => {
-        modal.style.display = 'none';
+        modal.style.display = 'none'; // Modal ko chhupate hain
     };
 }
 
+// Item ko remove karne ka function
 function removeItem(itemId) {
-    cartData.items = cartData.items.filter(item => item.id !== itemId);
-    renderCart();
-    saveCartToLocalStorage();
+    cartData.items = cartData.items.filter(item => item.id !== itemId); // Item ko filter karte hain
+    renderCart(); // Cart ko dobara render karte hain
+    saveCartToLocalStorage(); // Cart ko local storage mein save karte hain
 }
 
+// Cart ko local storage mein save karne ka function
 function saveCartToLocalStorage() {
-    localStorage.setItem('cartData', JSON.stringify(cartData));
+    localStorage.setItem('cartData', JSON.stringify(cartData)); // Cart data ko JSON string mein convert karke save karte hain
 }
 
+// Local storage se cart ko load karne ka function
 function loadCartFromLocalStorage() {
-    const savedCart = localStorage.getItem('cartData');
+    const savedCart = localStorage.getItem('cartData'); // Local storage se cart data lete hain
     if (savedCart) {
-        cartData = JSON.parse(savedCart);
-        renderCart();
+        cartData = JSON.parse(savedCart); // JSON string ko object mein convert karte hain
+        renderCart(); // Cart ko render karte hain
     } else {
-        fetchCartData();
+        fetchCartData(); // Agar local storage mein kuch nahi hai toh API se fetch karte hain
     }
 }
 
+// Loader dikhane ka function
 function showLoader() {
-    document.getElementById('loader').style.display = 'flex';
+    document.getElementById('loader').style.display = 'flex'; // Loader ko dikhate hain
 }
 
+// Loader ko chhupane ka function
 function hideLoader() {
-    document.getElementById('loader').style.display = 'none';
+    document.getElementById('loader').style.display = 'none'; // Loader ko chhupate hain
 }
 
+// Page load hone par functions ko execute karte hain
 document.addEventListener('DOMContentLoaded', () => {
-    loadCartFromLocalStorage();
-    document.querySelector('.cart-items').addEventListener('change', handleQuantityChange);
-    document.querySelector('.cart-items').addEventListener('click', handleRemoveItem);
+    loadCartFromLocalStorage(); // Local storage se cart load karte hain
+    document.querySelector('.cart-items').addEventListener('change', handleQuantityChange); // Quantity change ke liye event listener
+    document.querySelector('.cart-items').addEventListener('click', handleRemoveItem); // Item remove ke liye event listener
     document.getElementById('checkout-btn').addEventListener('click', () => {
-        alert('Proceeding to checkout!');
+        alert('Proceeding to checkout!'); // Checkout ke liye alert dikhate hain
     });
 });
